@@ -1,0 +1,286 @@
+{
+  "name": "slinghook",
+  "displayName": "SlingHook",
+  "description": "Catch. Debug. Replay. Your SlingHook webhook feed live in the editor, with replay to localhost and copy as fixture.",
+  "version": "0.1.0",
+  "publisher": "slinghook",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "homepage": "https://slinghook.co.za",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DylanCourtney584/slinghook-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DylanCourtney584/slinghook-vscode/issues"
+  },
+  "keywords": [
+    "webhook",
+    "webhooks",
+    "replay",
+    "stripe",
+    "github",
+    "shopify",
+    "paddle",
+    "debugger"
+  ],
+  "categories": [
+    "Debuggers",
+    "Testing",
+    "Other"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "type": "module",
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "slinghook",
+          "title": "SlingHook",
+          "icon": "media/activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "slinghook": [
+        {
+          "id": "slinghook.feed",
+          "name": "Live feed",
+          "icon": "media/activity.svg",
+          "contextualTitle": "SlingHook"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "slinghook.feed",
+        "contents": "See the webhooks your SlingHook endpoints catch, live, and replay them to your local server.\n[Sign In](command:slinghook.signIn)\nSelf-hosting SlingHook? [Sign in to your own server](command:slinghook.signInSelfHosted) or [paste an API token](command:slinghook.signInWithToken).",
+        "when": "!slinghook.signedIn"
+      },
+      {
+        "view": "slinghook.feed",
+        "contents": "No endpoints in this workspace yet.\n[Open the dashboard](command:slinghook.openDashboard)",
+        "when": "slinghook.signedIn"
+      }
+    ],
+    "commands": [
+      {
+        "command": "slinghook.signIn",
+        "title": "Sign In",
+        "category": "SlingHook"
+      },
+      {
+        "command": "slinghook.signInSelfHosted",
+        "title": "Sign In to a Self-hosted Server\u2026",
+        "category": "SlingHook"
+      },
+      {
+        "command": "slinghook.signInWithToken",
+        "title": "Sign In with an API Token\u2026",
+        "category": "SlingHook"
+      },
+      {
+        "command": "slinghook.signOut",
+        "title": "Sign Out",
+        "category": "SlingHook",
+        "icon": "$(sign-out)"
+      },
+      {
+        "command": "slinghook.refresh",
+        "title": "Refresh",
+        "category": "SlingHook",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "slinghook.openDashboard",
+        "title": "Open Dashboard",
+        "category": "SlingHook",
+        "icon": "$(link-external)"
+      },
+      {
+        "command": "slinghook.copyCatchUrl",
+        "title": "Copy Catch URL",
+        "category": "SlingHook",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "slinghook.setReplayTarget",
+        "title": "Set Replay Target\u2026",
+        "category": "SlingHook",
+        "icon": "$(target)"
+      },
+      {
+        "command": "slinghook.openEvent",
+        "title": "Open Event",
+        "category": "SlingHook"
+      },
+      {
+        "command": "slinghook.replayEvent",
+        "title": "Replay to Local Server",
+        "category": "SlingHook",
+        "icon": "$(debug-rerun)"
+      },
+      {
+        "command": "slinghook.copyFixture",
+        "title": "Copy as Fixture",
+        "category": "SlingHook",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "slinghook.generateCode",
+        "title": "Generate Types and Test\u2026",
+        "category": "SlingHook",
+        "icon": "$(code)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "slinghook.signOut",
+          "when": "slinghook.signedIn"
+        },
+        {
+          "command": "slinghook.openEvent",
+          "when": "false"
+        },
+        {
+          "command": "slinghook.copyCatchUrl",
+          "when": "false"
+        },
+        {
+          "command": "slinghook.setReplayTarget",
+          "when": "false"
+        },
+        {
+          "command": "slinghook.replayEvent",
+          "when": "resourceScheme == slinghook-event"
+        },
+        {
+          "command": "slinghook.copyFixture",
+          "when": "resourceScheme == slinghook-event"
+        },
+        {
+          "command": "slinghook.generateCode",
+          "when": "resourceScheme == slinghook-event"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "slinghook.refresh",
+          "when": "view == slinghook.feed && slinghook.signedIn",
+          "group": "navigation@1"
+        },
+        {
+          "command": "slinghook.openDashboard",
+          "when": "view == slinghook.feed",
+          "group": "navigation@2"
+        },
+        {
+          "command": "slinghook.signOut",
+          "when": "view == slinghook.feed && slinghook.signedIn",
+          "group": "z_account"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "slinghook.replayEvent",
+          "when": "view == slinghook.feed && viewItem == event",
+          "group": "inline@1"
+        },
+        {
+          "command": "slinghook.copyFixture",
+          "when": "view == slinghook.feed && viewItem == event",
+          "group": "inline@2"
+        },
+        {
+          "command": "slinghook.replayEvent",
+          "when": "view == slinghook.feed && viewItem == event",
+          "group": "1_event@1"
+        },
+        {
+          "command": "slinghook.copyFixture",
+          "when": "view == slinghook.feed && viewItem == event",
+          "group": "1_event@2"
+        },
+        {
+          "command": "slinghook.generateCode",
+          "when": "view == slinghook.feed && viewItem == event",
+          "group": "1_event@3"
+        },
+        {
+          "command": "slinghook.copyCatchUrl",
+          "when": "view == slinghook.feed && viewItem == endpoint",
+          "group": "inline@1"
+        },
+        {
+          "command": "slinghook.copyCatchUrl",
+          "when": "view == slinghook.feed && viewItem == endpoint",
+          "group": "1_endpoint@1"
+        },
+        {
+          "command": "slinghook.setReplayTarget",
+          "when": "view == slinghook.feed && viewItem == endpoint",
+          "group": "1_endpoint@2"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "slinghook.replayEvent",
+          "when": "resourceScheme == slinghook-event",
+          "group": "navigation@1"
+        },
+        {
+          "command": "slinghook.copyFixture",
+          "when": "resourceScheme == slinghook-event",
+          "group": "navigation@2"
+        },
+        {
+          "command": "slinghook.generateCode",
+          "when": "resourceScheme == slinghook-event",
+          "group": "navigation@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SlingHook",
+      "properties": {
+        "slinghook.server": {
+          "type": "string",
+          "default": "https://slinghook.co.za",
+          "markdownDescription": "The SlingHook server. Change it only for a self-hosted install, e.g. `https://hooks.example.com`.",
+          "scope": "application"
+        },
+        "slinghook.eventsPerEndpoint": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 200,
+          "description": "How many of the newest events to keep in the feed for each endpoint."
+        },
+        "slinghook.notifyOnNewEvents": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show a notification for each new webhook on an endpoint you have open in the feed."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "test": "node --test test/*.test.js",
+    "package": "vsce package --no-dependencies",
+    "vscode:prepublish": "node esbuild.mjs --production"
+  },
+  "devDependencies": {
+    "@types/vscode": "~1.90.0",
+    "@vscode/vsce": "^3.1.0",
+    "esbuild": "^0.28.2"
+  }
+}
