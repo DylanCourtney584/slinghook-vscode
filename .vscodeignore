@@ -6,3 +6,4 @@ node_modules/**
 esbuild.mjs
 .gitignore
 *.vsix
+.idea/**
